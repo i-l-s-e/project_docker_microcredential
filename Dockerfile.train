@@ -1,12 +1,16 @@
-FROM <base imagae>
+FROM python:3.11
 
 # TODO: Set a working directory
-
+WORKDIR /app
 # TODO: Copy the requirements.txt file to the working directory
-
+COPY requirements.txt /app/
 # TODO: Install the Python dependencies
-
+RUN pip install --no-cache-dir -r requirements.txt
 # TODO: Copy the training script (train.py) to the working directory
-
+COPY train.py /app/
 # TODO: Run the training script that generates the model
-CMD [...]
+CMD ["python", "train.py"]
+
+# commands to build the docker image and run the container
+# docker build . -f Dockerfile.train -t train_ml:v01
+# docker run --detach --rm train_ML:v01
