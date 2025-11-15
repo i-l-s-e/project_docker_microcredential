@@ -13,4 +13,6 @@ CMD ["python", "train.py"]
 
 # commands to build the docker image and run the container
 # docker build . -f Dockerfile.train -t train_ml:v01
-# docker run --detach --rm train_ML:v01
+# Note i created a app folder locally, copied the train.py file into the app folder with a subfolder "models"
+# docker run -it --rm -v /Users/ilsevandromme/project_docker/project_docker_microcredential/app:/app train_ml:v01
+# output: Model training complete and saved as iris_model.pkl
