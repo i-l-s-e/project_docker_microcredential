@@ -1,27 +1,57 @@
-Step 1 Containerize and run the training of the ML model
-see Dockerfile.train
-Step 2 Containerize and run the serving of the ML model
-see Dockerfile.infer
+Step by Step explanation on the project of Docker 
 
-# i created a folder app with a subfolder models and copied the train.py and Server.py to the app folder
-to ensure the containers were able to find the codes.
+* clone the repository
+    git clone 
+* Containerize and run the training of the ML model
+    updated the dockerfile.train: see Dockerfile.train
+* Containerize and run the serving of the ML model
+    updated the dockerfile.infer: see Dockerfile.infer
 
-after the training container i see the model pickle file available in the models subfolder
-after the serving of the container i could access localhost:8080 with the welcome message
-and i could test the prediction of the model with a curl command (see dockerfile.infer)
+* Run the 2 containers:
+    For the command see the dockerfiles
+    i created a folder "app" with a subfolder "models" and copied the train.py and Server.py to the app folder
+    to ensure the containers were able to find the codes.
+    i mounted the containers to the same folder because the trainer container creates
+    a model pickle file that the second container who serves the model needs to correctly work
 
-i submitted the 2 images to docker hub
-by first creating a tag for each image
-and then use 
-docker push ilseclv/train_ml:v01-amd64
+* checking if the containers worked correctly
+    after the "trainer container" i see the model pickle file available in the "models" subfolder (locally)
+    after the "server container" i could access http://localhost:8080 and saw the welcome message
+    and i could test the prediction of the model with a curl command (see dockerfile.infer)
 
-on the HPC, i created a shell:
-nano project_microcredential.sh 
-see github for the file
-and used SBATCH project_microcredential.sh
-to submit the job
+* Store the Docker images
+    i submitted the 2 images to my docker hub by first creating a tag (docker tag) for each image
+    and then use 
+    "docker push ilseclv/train_ml:v01-amd64"
+    "docker push ilseclv/infer_ml:v01-amd64"
 
-note i couldn't submit the job to donphan, my only option was doduo.
+* Store the dockerfiles on github
+    i committed the local folder with the updated dockerfiles
+    git add
+    git commit -m ""
+    git push
 
-i saved the shell script and the slurm log onto github 
+* Build an apptainer image
+    on the HPC, i created a shell script using:
+        nano project_microcredential.sh 
+        see github or the submitted zip folder for the file
+        i included a command to pull and build the docker images i have on dockerhub:
+        "apptainer build ./train_ml.sif docker://ilseclvd/train_ml:v01-amd64"
+    and used the following command to submit the job
+    SBATCH project_microcredential.sh
+    note i couldn't submit the job to donphan, my only option was doduo.
+    note also in my first attempt it didn't work and i received an error on compatibility
+    because i build the docker images on mac and they couldn't be build on linux with apptainer
+    i therefore had to build them again with a platform option to make it compatible
 
+
+* save the shell script and slurm log file to github
+    i cloned the github repository on my scratch space on the HPC
+    i copied the shell script (project_microcredential.sh) and the slurm log file (slurm-59942816.out) 
+    to the git directory 
+    i added and committed, but to push i had to create a token on github:
+    settings>Developper settings>personal token access>create new token  
+
+* zipfile
+    i pulled the updates from github (made by pushing from the HPC) to have the files locally,
+    and created a zipfile from my final directory
