@@ -16,3 +16,11 @@ CMD ["python", "train.py"]
 # Note i created a app folder locally, copied the train.py file into the app folder with a subfolder "models"
 # docker run -it --rm -v /Users/ilsevandromme/project_docker/project_docker_microcredential/app:/app train_ml:v01
 # output: Model training complete and saved as iris_model.pkl
+
+
+
+# Because i received an error when building this image on HPC as apptainer image regarding incompatibility with linux vs arm64 silicon apple
+# i rebuild the image with a platform option
+# docker build --platform=linux/amd64 -t train_ml:amd64 . -f Dockerfile.train
+# docker tag train_ml:amd64 ilseclvd/train_ml:v01-amd64
+# docker push ilseclvd/train_ml:v01-amd64
