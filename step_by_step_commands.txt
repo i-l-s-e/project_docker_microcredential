@@ -1,11 +1,19 @@
-Step by Step explanation on the project of Docker 
+Step by Step explanation on the project of Docker/apptainer
 
 * clone the repository
-    git clone 
-* Containerize and run the training of the ML model
+    git clone https://github.com/i-l-s-e/project_docker_microcredential.git
+
+* Containerize and run the training  and serving of the ML model
+    * dockerfiles
     updated the dockerfile.train: see Dockerfile.train
-* Containerize and run the serving of the ML model
     updated the dockerfile.infer: see Dockerfile.infer
+
+    * Build the docker images
+    docker build . -f Dockerfile.train -t train_ml:v01
+    docker build . -f Dockerfile.infer -t infer_ml:v01
+    Note: i had to rebuild the images due to a compatibility issue in the later steps when working on the HPC:
+        docker build --platform=linux/amd64 -t train_ml:amd64 . -f Dockerfile.train
+        docker build --platform=linux/amd64 -t infer_ml:amd64 . -f Dockerfile.infer
 
 * Run the 2 containers:
     For the command see the dockerfiles
